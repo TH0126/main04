@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>海外求人サイト</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,900;1,800&family=Yuji+Boku&display=swap&text=World Jobs"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header id="header">
+        <h1>World Jobs</h1>
+        <div class="h_tab">Find Work</div>
+        <div class="h_tab">Why Hello World</div>
+        <div class="h_tab">Enterprise</div>
+        <div id="login">Log in</div>
+        <div id="signup">Sign Up</div>
+    </header>
+    <hr class="top">
+    <div id="main">
+        <div id="search">
+            <p>ウェブ系フリーランス求人</p>
+            <p>（Website Freelancer jobs）</p>
+            <p class="pp">次の条件で絞り込む：</p>
+            <div id="search_btn">絞り込む</div>
+            <p class="pp">報酬：</p>
+            <div class="chkbox">
+                <input id="fix" type="checkbox" value="1"><label for="fix">固定価格プロジェクト</label>
+            </div>
+            <div id="fix_min_max">
+                <input id="fix_start" class="textbox-start" type="text" placeholder="最低">
+                <p>to</p>
+                <input id="fix_end" class="textbox-end" type="text" placeholder="最高">
+            </div>
+            <div class="chkbox">
+                <input id="hour" type="checkbox" value="1"><label for="hour">時給制プロジェクト</label>
+            </div>
+            <div id="hour_min_max">
+                <input class="textbox-start" type="text" placeholder="最低">
+                <p>to</p>
+                <input class="textbox-end" type="text" placeholder="最高">
+            </div>
+            <p class="pp">レベル：</p>
+            <div class="chkbox">
+                <input id="begi" type="checkbox" value="0"><label for="begi">初級（Beginner）</label>
+                <input id="inter" type="checkbox" value="1"><label for="inter">中級（Intermediate）</label>
+                <input id="exp" type="checkbox" value="2"><label for="exp">上級（Expert）</label>
+            </div>
+        </div>
+        <div id="result">
+            <div id="sort">
+                <select id="sort0" class="classic" name="sort">
+                    <option value="1">新しい順</option>
+                    <option value="2">低い報酬から</option>
+                    <option value="3">高い報酬から</option>
+                </select>
+                <div class="sikaku_1">1</div>
+                <div class="sikaku_0">2</div>
+                <div class="sikaku_0">3</div>
+                <div class="sikaku_0">4</div>
+                <div class="sikaku_0">5</div>
+                <div class="sikaku_0">6</div>
+                <div class="sikaku_0">7</div>
+                <div class="sikaku_0">8</div>
+            </div>
+            <hr class="ser">
+            <div id="detail"></div>
+        </div>
+    </div>
+    <!-- JavaScript開始 -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "",
+            authDomain: "kougi07.firebaseapp.com",
+            projectId: "kougi07",
+            storageBucket: "kougi07.appspot.com",
+            messagingSenderId: "714883249132",
+            appId: "1:714883249132:web:665d376eed36c4289946c9"
+        };
+
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            serverTimestamp,
+            onSnapshot,
+            orderBy,
+            query,
+            where,
+        } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-firestore.js";
+
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        const db = getFirestore(app);
+
+        const signupbtn = document.getElementById("signup");
+        const searchbtn = document.getElementById("search_btn");
+
+        const kadaiRef = collection(db, "kadai07");
+
+        const sortSct = document.getElementById("sort0");
+
+        //Web上のFirebaseでデータの入力方法がなさそうだったので、ここでInsert
+        signupbtn.addEventListener("click", function () {
+
+            const title = [
+                "Website Development & Implementation",
+                "Developer needed for API integration",
+                "Need an expert Web Designer for high quality website designs"
+            ];
+            const rewardtype = [
+                "fix",
+                "fix",
+                "fix"
+            ];
+            const reward = [
+                1900,
+                200,
+                500
+            ];
+            const level = [
+                "Expert",
+                "Intermediate",
+                "Intermediate"
+            ];
+            const update = [
+                5,
+                2,
+                10
+            ];
+            const requester = [
+                "",
+                "",
+                "",
+            ];
+            // Web Programming,Web Design,WordPress,PHP,Database,API
+            const group = [
+                "111000",
+                "000111",
+                "001000"
+            ];
+            const detail_small = [
+                "We are looking for a Wordpress website and replacement of existing theme.A rebrand has been completed, which will need to be implemented into the new design of the website.",
+                "We need a developer to assess API docs and ensure project compatibility then create PHP based form to access remote API, create pay-per-view ticket and password and write result to MySQL.",
+                "We are looking for an Expert Web Designer to join our team\nwe have a lot of concistent projects per month"
+            ];
+
+            for (let i = 0; i < title.length; i++) {
+                let data = {
+                    title: title[i],
+                    rewardtype: rewardtype[i],
+                    reward: reward[i],
+                    level: level[i],
+                    update: update[i],
+                    requester: requester[i],
+                    group: group[i],
+                    detail_small: detail_small[i],
+                };
+
+                addDoc(kadaiRef, data);
+            }
+        });
+
+        //ソート方法が変わった場合
+        sortSct.addEventListener("change", function () {
+
+            //前回の検索結果削除
+            const div_detail0 = document.getElementById("detail");
+            div_detail0.remove();
+
+            const div_result = document.getElementById("result");
+            const div0_element = document.createElement("div");
+            div0_element.setAttribute("id", "detail");
+            div_result.appendChild(div0_element);
+
+            const div_detail = document.getElementById("detail");
+
+            let q = "";
+            let j = 0;
+
+            //それぞれのソート順を指定
+            if (sortSct.value === "1") {
+                q = query(kadaiRef, orderBy("update"));
+            } else if (sortSct.value === "2") {
+                q = query(kadaiRef, orderBy("reward"));
+            } else if (sortSct.value === "3") {
+                q = query(kadaiRef, orderBy("reward", "desc"));
+            }
+
+            onSnapshot(q, (querySnapshot) => {
+                const dataArray = [];
+
+                querySnapshot.docs.forEach(function (doc) {
+                    const data = {
+                        id: doc.id,
+                        data: doc.data(),
+                    };
+                    dataArray.push(data);
+                });
+
+                dataArray.forEach(function (data) {
+
+                    if (j < dataArray.length) {
+                        //ソート順を元に明細データ作成
+                        const div_element = document.createElement("div");
+                        div_element.setAttribute("class", "title");
+                        div_element.textContent = data.data.title;
+                        div_detail.appendChild(div_element);
+
+                        const div2_element = document.createElement("div");
+                        div2_element.setAttribute("class", "ty_up");
+                        div2_element.setAttribute("id", "ty_up" + j)
+                        div_detail.appendChild(div2_element);
+
+                        const div_ty = document.getElementById("ty_up" + j);
+                        const div21_element = document.createElement("div");
+                        div21_element.setAttribute("class", "new");
+                        div21_element.textContent = "New";
+                        div_ty.appendChild(div21_element);
+
+                        const div22_element = document.createElement("div");
+                        div22_element.setAttribute("class", "thin");
+
+                        if (data.data.rewardtype === "fix") {
+                            div22_element.textContent = "Fixed-price - Posted " + data.data.update + " days ago";
+                        } else if (data.data.rewardtype === "hour") {
+                            div22_element.textContent = "Hours needed - Posted " + data.data.update + " days ago";
+                        } else {
+                        }
+                        div_ty.appendChild(div22_element);
+
+                        const div3_element = document.createElement("div");
+                        div3_element.setAttribute("class", "pr_le");
+                        div3_element.setAttribute("id", "pr_le" + j);
+                        div_detail.appendChild(div3_element);
+
+                        const div_pr = document.getElementById("pr_le" + j);
+                        const div31_element = document.createElement("div");
+                        div31_element.setAttribute("class", "price");
+                        div31_element.setAttribute("id", "price" + j);
+                        div_pr.appendChild(div31_element);
+
+                        const div_price = document.getElementById("price" + j);
+                        const p311_element = document.createElement("p");
+                        p311_element.setAttribute("class", "thick");
+                        p311_element.textContent = "$" + data.data.reward.toLocaleString();
+                        div_price.appendChild(p311_element);
+                        const p312_element = document.createElement("p");
+                        p312_element.setAttribute("class", "thin");
+                        if (data.data.rewardtype === "fix") {
+                            p312_element.textContent = "Fixed Price";
+                        } else if (data.data.rewardtype === "hour") {
+                            p312_element.textContent = "Hours Needed";
+                        } else {
+                        }
+                        div_price.appendChild(p312_element);
+
+                        const div32_element = document.createElement("div");
+                        div32_element.setAttribute("class", "level");
+                        div32_element.setAttribute("id", "level" + j);
+                        div_pr.appendChild(div32_element);
+
+                        const div_level = document.getElementById("level" + j);
+                        const p321_element = document.createElement("p");
+                        p321_element.setAttribute("class", "thick");
+                        p321_element.textContent = data.data.level;
+                        div_level.appendChild(p321_element);
+                        const p322_element = document.createElement("p");
+                        p322_element.setAttribute("class", "thin");
+                        p322_element.textContent = "Experience Level";
+                        div_level.appendChild(p322_element);
+
+                        const div4_element = document.createElement("div");
+                        div4_element.setAttribute("class", "detail-s");
+                        div4_element.textContent = data.data.detail_small;
+                        div_detail.appendChild(div4_element);
+
+                        const div5_element = document.createElement("div");
+                        div5_element.setAttribute("class", "group");
+                        div5_element.setAttribute("id", "group" + j);
+                        div_detail.appendChild(div5_element);
+
+                        const div_gr = document.getElementById("group" + j);
+                        const str = data.data.group;
+
+                        const div_gr0 = document.createElement("div");
+                        if (str.substr(0, 1) === "0") {
+                            div_gr0.setAttribute("class", "G_0");
+                        } else if (str.substr(0, 1) === "1") {
+                            div_gr0.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr0.textContent = "Web Programming"
+                        div_gr.appendChild(div_gr0);
+
+                        const div_gr1 = document.createElement("div");
+                        if (str.substr(1, 1) === "0") {
+                            div_gr1.setAttribute("class", "G_0");
+                        } else if (str.substr(1, 1) === "1") {
+                            div_gr1.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr1.textContent = "Web Design"
+                        div_gr.appendChild(div_gr1);
+
+                        const div_gr2 = document.createElement("div");
+                        if (str.substr(2, 1) === "0") {
+                            div_gr2.setAttribute("class", "G_0");
+                        } else if (str.substr(2, 1) === "1") {
+                            div_gr2.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr2.textContent = "WordPress"
+                        div_gr.appendChild(div_gr2);
+
+                        const div_gr3 = document.createElement("div");
+                        if (str.substr(3, 1) === "0") {
+                            div_gr3.setAttribute("class", "G_0");
+                        } else if (str.substr(3, 1) === "1") {
+                            div_gr3.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr3.textContent = "PHP"
+                        div_gr.appendChild(div_gr3);
+
+                        const div_gr4 = document.createElement("div");
+                        if (str.substr(4, 1) === "0") {
+                            div_gr4.setAttribute("class", "G_0");
+                        } else if (str.substr(4, 1) === "1") {
+                            div_gr4.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr4.textContent = "Database"
+                        div_gr.appendChild(div_gr4);
+
+                        const div_gr5 = document.createElement("div");
+                        if (str.substr(5, 1) === "0") {
+                            div_gr5.setAttribute("class", "G_0");
+                        } else if (str.substr(5, 1) === "1") {
+                            div_gr5.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr5.textContent = "API"
+                        div_gr.appendChild(div_gr5);
+
+                        const div6_element = document.createElement("div");
+                        div6_element.setAttribute("class", "see_btn");
+                        div6_element.textContent = "See More";
+                        div_detail.appendChild(div6_element);
+
+                        const hr_element = document.createElement("hr");
+                        div_detail.appendChild(hr_element);
+
+                        j++
+                    }
+                });
+            });
+
+
+        });
+
+        //検索条件を指定して絞り込む
+        searchbtn.addEventListener("click", function () {
+
+            //前回の検索結果削除
+            const div_detail0 = document.getElementById("detail");
+            div_detail0.remove();
+
+            const div_result = document.getElementById("result");
+            const div0_element = document.createElement("div");
+            div0_element.setAttribute("id", "detail");
+            div_result.appendChild(div0_element);
+
+            const div_detail = document.getElementById("detail");
+
+            //データ取得処理
+            let fix_start = 0;
+            let fix_end = 99999;
+            const fix_flg = document.getElementById("fix");
+            const f_start = document.getElementById("fix_start");
+            const f_end = document.getElementById("fix_end");
+
+            const be_flg = document.getElementById("begi");
+            const in_flg = document.getElementById("inter");
+            const ex_flg = document.getElementById("exp");
+
+            const pr_flg = document.getElementById("program");
+            const de_flg = document.getElementById("design");
+            const wo_flg = document.getElementById("word");
+            const ph_flg = document.getElementById("php");
+            const da_flg = document.getElementById("data");
+            const ap_flg = document.getElementById("api");
+
+
+            let q = "";
+            let j = 0;
+
+            //固定価格による抽出設定
+            if (fix_flg.checked) {
+                if (f_start.value != "") {
+                    fix_start = Number(f_start.value);
+                }
+                if (f_end.value != "") {
+                    fix_end = Number(f_end.value);
+                }
+                q = query(kadaiRef, where("reward", ">=", fix_start), where("reward", "<=", fix_end));
+            } else {
+                q = query(kadaiRef);
+            }
+
+            //レベルによる抽出設定
+            let level_str = [];
+
+            if (be_flg.checked) {
+                level_str.push("Beginner");
+            }
+            if (in_flg.checked) {
+                level_str.push("Intermediate");
+            }
+            if (ex_flg.checked) {
+                level_str.push("Expert");
+            }
+            if (level_str.length > 0) {
+                q = query(kadaiRef, where("level", "in", level_str));
+            }
+
+
+            onSnapshot(q, (querySnapshot) => {
+                const dataArray = [];
+
+                querySnapshot.docs.forEach(function (doc) {
+                    const data = {
+                        id: doc.id,
+                        data: doc.data(),
+                    };
+                    dataArray.push(data);
+                });
+
+                // const tagArray = [];
+                dataArray.forEach(function (data) {
+
+                    if (j < dataArray.length) {
+                        //抽出結果を元に明細データ作成
+                        const div_element = document.createElement("div");
+                        div_element.setAttribute("class", "title");
+                        div_element.textContent = data.data.title;
+                        div_detail.appendChild(div_element);
+
+                        const div2_element = document.createElement("div");
+                        div2_element.setAttribute("class", "ty_up");
+                        div2_element.setAttribute("id", "ty_up" + j)
+                        div_detail.appendChild(div2_element);
+
+                        const div_ty = document.getElementById("ty_up" + j);
+                        const div21_element = document.createElement("div");
+                        div21_element.setAttribute("class", "new");
+                        div21_element.textContent = "New";
+                        div_ty.appendChild(div21_element);
+
+                        const div22_element = document.createElement("div");
+                        div22_element.setAttribute("class", "thin");
+
+                        if (data.data.rewardtype === "fix") {
+                            div22_element.textContent = "Fixed-price - Posted " + data.data.update + " days ago";
+                        } else if (data.data.rewardtype === "hour") {
+                            div22_element.textContent = "Hours needed - Posted " + data.data.update + " days ago";
+                        } else {
+                        }
+                        div_ty.appendChild(div22_element);
+
+                        const div3_element = document.createElement("div");
+                        div3_element.setAttribute("class", "pr_le");
+                        div3_element.setAttribute("id", "pr_le" + j);
+                        div_detail.appendChild(div3_element);
+
+                        const div_pr = document.getElementById("pr_le" + j);
+                        const div31_element = document.createElement("div");
+                        div31_element.setAttribute("class", "price");
+                        div31_element.setAttribute("id", "price" + j);
+                        div_pr.appendChild(div31_element);
+
+                        const div_price = document.getElementById("price" + j);
+                        const p311_element = document.createElement("p");
+                        p311_element.setAttribute("class", "thick");
+                        p311_element.textContent = "$" + data.data.reward.toLocaleString();
+                        div_price.appendChild(p311_element);
+                        const p312_element = document.createElement("p");
+                        p312_element.setAttribute("class", "thin");
+                        if (data.data.rewardtype === "fix") {
+                            p312_element.textContent = "Fixed Price";
+                        } else if (data.data.rewardtype === "hour") {
+                            p312_element.textContent = "Hours Needed";
+                        } else {
+                        }
+                        div_price.appendChild(p312_element);
+
+                        const div32_element = document.createElement("div");
+                        div32_element.setAttribute("class", "level");
+                        div32_element.setAttribute("id", "level" + j);
+                        div_pr.appendChild(div32_element);
+
+                        const div_level = document.getElementById("level" + j);
+                        const p321_element = document.createElement("p");
+                        p321_element.setAttribute("class", "thick");
+                        p321_element.textContent = data.data.level;
+                        div_level.appendChild(p321_element);
+                        const p322_element = document.createElement("p");
+                        p322_element.setAttribute("class", "thin");
+                        p322_element.textContent = "Experience Level";
+                        div_level.appendChild(p322_element);
+
+                        const div4_element = document.createElement("div");
+                        div4_element.setAttribute("class", "detail-s");
+                        div4_element.textContent = data.data.detail_small;
+                        div_detail.appendChild(div4_element);
+
+                        const div5_element = document.createElement("div");
+                        div5_element.setAttribute("class", "group");
+                        div5_element.setAttribute("id", "group" + j);
+                        div_detail.appendChild(div5_element);
+
+                        const div_gr = document.getElementById("group" + j);
+                        const str = data.data.group;
+
+                        const div_gr0 = document.createElement("div");
+                        if (str.substr(0, 1) === "0") {
+                            div_gr0.setAttribute("class", "G_0");
+                        } else if (str.substr(0, 1) === "1") {
+                            div_gr0.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr0.textContent = "Web Programming"
+                        div_gr.appendChild(div_gr0);
+
+                        const div_gr1 = document.createElement("div");
+                        if (str.substr(1, 1) === "0") {
+                            div_gr1.setAttribute("class", "G_0");
+                        } else if (str.substr(1, 1) === "1") {
+                            div_gr1.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr1.textContent = "Web Design"
+                        div_gr.appendChild(div_gr1);
+
+                        const div_gr2 = document.createElement("div");
+                        if (str.substr(2, 1) === "0") {
+                            div_gr2.setAttribute("class", "G_0");
+                        } else if (str.substr(2, 1) === "1") {
+                            div_gr2.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr2.textContent = "WordPress"
+                        div_gr.appendChild(div_gr2);
+
+                        const div_gr3 = document.createElement("div");
+                        if (str.substr(3, 1) === "0") {
+                            div_gr3.setAttribute("class", "G_0");
+                        } else if (str.substr(3, 1) === "1") {
+                            div_gr3.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr3.textContent = "PHP"
+                        div_gr.appendChild(div_gr3);
+
+                        const div_gr4 = document.createElement("div");
+                        if (str.substr(4, 1) === "0") {
+                            div_gr4.setAttribute("class", "G_0");
+                        } else if (str.substr(4, 1) === "1") {
+                            div_gr4.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr4.textContent = "Database"
+                        div_gr.appendChild(div_gr4);
+
+                        const div_gr5 = document.createElement("div");
+                        if (str.substr(5, 1) === "0") {
+                            div_gr5.setAttribute("class", "G_0");
+                        } else if (str.substr(5, 1) === "1") {
+                            div_gr5.setAttribute("class", "G_1");
+                        } else {
+                        }
+                        div_gr5.textContent = "API"
+                        div_gr.appendChild(div_gr5);
+
+                        const div6_element = document.createElement("div");
+                        div6_element.setAttribute("class", "see_btn");
+                        div6_element.textContent = "See More";
+                        div_detail.appendChild(div6_element);
+
+                        const hr_element = document.createElement("hr");
+                        div_detail.appendChild(hr_element);
+
+                        j++
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
