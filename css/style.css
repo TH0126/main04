@@ -25,260 +25,35 @@ body{
 /*ーーーーーーーーーーー*/
 /*この下から記述*/
 /*ーーーーーーーーーーー*/
-header,.top {
-	margin: 0 auto;
-	width: 75em;
-}
-#header {
-	display: flex;
-	flex-wrap: wrap;
-	margin-bottom: 0.5em;
-	align-items: center;
-	margin-top: 0.5em;
-}
-#header h1{
-	font-family: 'Raleway', sans-serif;
-	margin-right: 1em;
-	color: slateblue;
-}
-.h_tab {
-	margin-right: 1em;
-	margin-left: 1em;
-	
-}
-#login {
-	margin-left: 20em;
-}
-#signup {
-	margin-left: 2em;
-	background: slateblue;
-	padding: 0.4em 1.2em;
-	border-radius: 20px;
-	color: snow;
-}
 #main {
 	display: flex;
-	margin: 0 auto;
-	width: 75em;
-	margin-top: 1em;
 }
-#search {
-	background-color: white;
-	width: 19.5em;
-	height: 35em;
-	margin-right: 0.5em;
-	box-shadow: 0 0 4px darkgrey;
-	padding-left: 1.5em;
+#select {
+	width: 200px;
 }
-#search_btn {
-	margin-left: 4em;
+#chart_div {
+	width: 1400px;
+	height: 750px;
+}
+.p_str {
+	margin-left: 2em;
+}
+#sort0 {
+	margin-left: 2em;
+}
+#btn {
+	margin-left: 2em;
 	background: steelblue;
-	padding: 0.2em 1.2em;
+	padding: 0.2em 1.0em;
 	border-radius: 0px;
-	width: 6.4em;	
+	width: 5em;	
 	color: snow;
 }
-#search_btn:hover {
+#btn:hover {
 	/* リンクをホバーしたときのカーソルにする。 */
 	cursor: pointer;
 }
-#search_btn:active {
+#btn:active {
 	position: relative;
 	top: 0.5px;
-}
-#sort {
-	display: flex;
-	padding-left: 1em;
-	padding-top: 1em;
-	padding-bottom: 1em;
-}
-.sikaku_1 {
-	margin-left: 14em;
-	background-color: lightgrey;
-	padding: 0.15em 0.8em;
-	border: 1px solid blue;
-}
-.sikaku_0 {
-	background-color: snow;
-	padding: 0.15em 0.8em;
-	border: 1px solid gray;
-}
-.pp {
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-}
-.chkbox input[type="checkbox"] {
-	display: none;
-}
-.chkbox input[type="checkbox"]+label {
-	display: none;
-	font-weight: 400;
-	display: inline-block;
-	line-height: 1;
-	cursor: pointer;
-	position: relative;
-	padding-left: 25px;
-}
-.chkbox input[type="checkbox"]+label::before {
-	background-color: #fff;
-	display: block;
-	border: 1px solid #29b2fe;
-	border-radius: 0;
-	content: "";
-	width: 16px;
-	height: 16px;
-	left: 0;
-	position: absolute;
-	box-sizing: border-box;
-}
-.chkbox input[type="checkbox"]:checked+label::after {
-	border-color:  #fff;
-	display: block;
-	border-left: 3px solid;
-	border-bottom: 3px solid;
-	content: "";
-	height: 5px;
-	left: 3px;
-	position: absolute;
-	top: 4px;
-	transform: rotate(-45deg);
-	width: 10px;
-	box-sizing: border-box;
-	color: #29b2fe;
-}
-#fix_min_max {
-	display: flex;
-	align-items: center;
-}
-#hour_min_max {
-	display: flex;
-	align-items: center;
-}
-.textbox-start {
-	width: 6em;
-	height: 3em;
-	margin: 0.5em 1em;
-}
-.textbox-end {
-	width: 6em;
-	height: 3em;
-	margin: 0.5em 1em;
-}
-.ser {
-	width: 54.5em;
-}
-#result {
-	background-color: white;
-	width: 54.5em;
-	margin-left: 0.5em;
-	min-height: 40em;
-	box-shadow: 0 0 4px darkgrey;
-}
-.classic {
-	background-color: white;
-	border: thin solid blue;
-	border-radius: 4px;
-	display: inline-block;
-	line-height: 1.5em;
-	padding: 0.5em 3.5em 0.5em 1em;
-	margin: 0;
-	box-sizing: border-box;
-	appearance: none;
-	background-image:
-		linear-gradient(45deg,transparent 50%, blue 50%),
-		linear-gradient(135deg, blue 50%,transparent 50%),
-		linear-gradient(to right,skyblue,skyblue);
-	background-position:
-		calc(100% - 20px) calc(1em + 2px),
-		calc(100% - 15px) calc(1em + 2px),
-		100% 0;
-	background-size:
-		5px 5px,
-		5px 5px,
-		2.5em 2.5em;
-	background-repeat: no-repeat;
-}
-.classic:focus {
-	background-image:
-		linear-gradient(45deg,white 50%, transparent 50%),
-		linear-gradient(135deg, transparent 50%,white 50%),
-		linear-gradient(to right,gray,gray);
-	background-position:
-		calc(100% - 15px) 1em,
-		calc(100% - 20px) 1em,
-		100% 0;
-	background-size:
-		5px 5px,
-		5px 5px,
-		2.5em 2.5em;
-	background-repeat: no-repeat;
-	border-color: gray;
-	outline: 0;
-}
-.title {
-	font-size: 1.2em;
-	margin-left: 0.8em;
-}
-.ty_up {
-	display: flex;
-	align-items: center;
-	margin-bottom: 1em;
-}
-.new {
-	margin-left: 1.2em;
-	background: green;
-	padding: 0.1em 0.7em;
-	border-radius: 20px;
-	color: snow;
-	font-size: 0.8em;
-	margin-right: 1em;
-}
-.thin {
-	color: gray;
-	font-size: 0.7em;
-}
-.pr_le {
-	display: flex;
-	margin-bottom: 1em;
-	margin-left: 1em;
-}
-.price {
-	margin-right: 4em;
-}
-.detail-s {
-	font-size: 0.9em;
-	margin-left: 1em;
-	margin-bottom: 1em;
-}
-.group {
-	display: flex;
-	margin-bottom: 1em;
-}
-.G_1 {
-	margin-left: 1.2em;
-	background: lightpink;
-	padding: 0.1em 0.7em;
-	border-radius: 20px;
-	color: black;
-	font-size: 0.8em;
-	margin-right: 0.5em;
-}
-.G_0 {
-	margin-left: 1.2em;
-	background: thistle;
-	padding: 0.1em 0.7em;
-	border-radius: 20px;
-	color: dimgray;
-	font-size: 0.8em;
-	margin-right: 0.5em;
-}
-.see_btn {
-	margin-left: 1.2em;
-	background: cornflowerblue;
-	padding: 0.4em 0.9em;
-	border-radius: 20px;
-	color: white;
-	font-size: 0.8em;
-	width: 6.4em;
-	margin-bottom: 1em;
 }
